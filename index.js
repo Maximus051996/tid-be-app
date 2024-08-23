@@ -19,7 +19,12 @@ app.use(userRoutes);
 
 
 // Swagger Documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', express.static('public/swagger'), swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+
+app.use('/api-docs', (req, res) => {
+    res.send(swaggerAssets);
+});
 
 
 // Database Connection
