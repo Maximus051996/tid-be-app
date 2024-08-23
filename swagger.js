@@ -3,10 +3,10 @@ const swaggerAutogen = require('swagger-autogen')();
 
 const doc = {
     info: {
-        title: 'Stock Management API',
-        description: 'Stock Management Documentation V1.0.0',
+        title: 'Task Investment API',
+        description: 'Task Investment Documentation V1.0.0',
     },
-    host: 'localhost:3000',
+    host: ['localhost:3000', 'tid-be-app.vercel.app'],
     tags: [
         {
             name: 'User-Module',

@@ -19,14 +19,11 @@ app.use(userRoutes);
 
 
 // Swagger Documentation
-// app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
-    swaggerOptions: {
-        url: '/swagger-ui/swagger.json'
-    }
-}));
+// Serve Swagger UI documentation
+app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+//test Api
 app.get('/test', (req, res) => {
     res.send('Test route working!');
 });
