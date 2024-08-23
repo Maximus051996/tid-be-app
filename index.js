@@ -8,7 +8,7 @@ const swaggerDocument = require('./swagger-output.json');
 const userRoutes = require('./routes/userroute');
 const msg = require('./messages');
 const app = express();
-
+const path = require('path');
 
 
 // Middlewares
@@ -19,7 +19,13 @@ app.use(userRoutes);
 
 
 // Swagger Documentation
-app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
+    swaggerOptions: {
+        url: '/swagger-ui/swagger.json'
+    }
+}));
 
 app.get('/test', (req, res) => {
     res.send('Test route working!');
