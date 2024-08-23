@@ -83,7 +83,11 @@ const doc = {
 const outputFile = './swagger-output.json';
 const routes = ['./routes/userroute.js'];
 
+const options = {
+    customCss: '.swagger-ui .topbar { display: none }'
+}
+
 /* NOTE: If you are using the express Router, you must pass in the 'routes' only the 
 root file where the route starts, such as index.js, app.js, routes.js, etc ... */
 
-swaggerAutogen(outputFile, routes, doc);
+swaggerAutogen(outputFile, routes, doc, options);
