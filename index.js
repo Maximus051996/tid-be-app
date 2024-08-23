@@ -19,9 +19,11 @@ app.use(userRoutes);
 
 
 // Swagger Documentation
-app.use('/api-docs', express.static('public/swagger'), swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-
+app.get('/test', (req, res) => {
+    res.send('Test route working!');
+});
 
 
 
