@@ -31,7 +31,7 @@ router.post('/login', async (req, res) => {
         // Return token 
         res.status(200).json({ token });
     } catch (error) {
-        res.status(500).json({ message: msg.INTERNAL_SERVER_ERROR });
+        res.status(500).json({ message: error.message });
     }
 });
 
@@ -63,7 +63,21 @@ router.post('/register-user', async (req, res) => {
 
         res.status(200).json({ message: msg.USER_REGISTERED });
     } catch (error) {
-        res.status(500).json({ message: msg.INTERNAL_SERVER_ERROR });
+        res.status(500).json({ message: error.message });
+    }
+});
+
+router.get('/get-user-details/:id', authenticateToken(), async (req, res) => {
+    // #swagger.tags = ['User-Module']
+    try {
+        const { id } = req.params;
+        const user = await User.findById({ _id: id }).select('-userPassword');
+        if (!user) {
+            return res.status(404).json({ message: msg.NOT_FOUND_ERROR });
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 
