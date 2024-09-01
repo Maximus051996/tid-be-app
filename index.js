@@ -5,18 +5,18 @@ const cookieParser = require('cookie-parser');
 const http = require('http');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
-const userRoutes = require('./routes/userroute');
+const userRoute = require('./routes/userroute');
+const taskRoute = require('./routes/taskroute');
 const msg = require('./messages');
 const app = express();
-const path = require('path');
 
 
 // Middlewares
 app.use(cors({ credentials: true, origin: '*' }));
 app.use(cookieParser());
 app.use(express.json());
-app.use(userRoutes);
-
+app.use(userRoute);
+app.use(taskRoute);
 
 // Swagger Documentation
 
