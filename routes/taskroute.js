@@ -8,7 +8,8 @@ const msg = require('../messages');
 router.get('/tasks', authenticateToken(), async (req, res) => {
     // #swagger.tags = ['Task-Module']
     try {
-        const tasks = await Task.find();
+        const userId = req.user.userId;
+        const tasks = await Task.find({ userId: userId });
         res.status(200).json(tasks);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -20,7 +21,7 @@ router.get('/task/:id', authenticateToken(), async (req, res) => {
     // #swagger.tags = ['Task-Module']
     try {
         const { id } = req.params;
-        const task = await Task.findById({ _id: id });
+        const task = await Task.findOne({ _id: id, userId: req.user.userId });
 
         if (!task) {
             return res.status(404).json({ error: msg.NOT_FOUND_ERROR });
@@ -39,7 +40,7 @@ router.post('/add-task', authenticateToken(), async (req, res) => {
         const { subject, description, priority, startDate, endDate, isRemainder } = req.body;
 
         // Validate required fields
-        if (!subject || !description || !priority || !startDate) {
+        if (!subject || !description || !priority || !startDate || !endDate) {
             return res.status(400).json({ error: msg.MANDATORY_FIELDS_ERROR });
         }
 
@@ -51,7 +52,8 @@ router.post('/add-task', authenticateToken(), async (req, res) => {
             endDate,
             isRemainder,
             isDeleted: false,
-            isCompleted: false
+            isCompleted: false,
+            userId: req.user.userId
         });
 
         await newTask.save();
@@ -79,6 +81,7 @@ router.put('/update-task/:id', authenticateToken(), async (req, res) => {
         if (description) task.description = description;
         if (priority) task.priority = priority;
         if (endDate) task.endDate = endDate;
+        if (req.user.userId) task.userId = req.user.userId;
         if (typeof isRemainder !== 'undefined') task.isRemainder = isRemainder;
         if (typeof isRemainder !== 'undefined') task.isCompleted = isCompleted;
 
@@ -97,7 +100,7 @@ router.delete('/delete-task/:id', authenticateToken(), async (req, res) => {
     try {
         const { id } = req.params;
 
-        const task = await Task.findById(id);
+        const task = await Task.findOne({ _id: id, userId: req.user.userId });
 
         if (!task) {
             return res.status(404).json({ error: msg.NOT_FOUND_ERROR });

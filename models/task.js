@@ -19,7 +19,8 @@ const TaskSchema = new mongoose.Schema({
         required: true
     },
     endDate: {
-        type: Date
+        type: Date,
+        required: true
     },
     isRemainder: {
         type: Boolean,
@@ -30,6 +31,11 @@ const TaskSchema = new mongoose.Schema({
     isCompleted: {
         type: Boolean,
     },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId, // Reference to User model
+        ref: 'User', // Reference the 'User' model
+        required: true // Make it required to associate the task with a user
+    }
 }, { collection: 'tbl_taskInfo' });
 
 // Export Task model
