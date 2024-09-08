@@ -11,7 +11,7 @@ function authenticateToken() {
 
         jwt.verify(token, secret_key, (err, user) => {
             if (err) {
-                return res.status(403).json({ message: 'Forbidden' });
+                return res.status(403).json({ message: 'Token expired , login again' });
             }
             req.user = user;
 
