@@ -67,7 +67,7 @@ router.put('/update-task/:id', authenticateToken(), async (req, res) => {
     // #swagger.tags = ['Task-Module']
     try {
         const { id } = req.params;
-        const { description, priroty, endDate, isRemainder, isCompleted } = req.body;
+        const { description, priority, endDate, isRemainder, isCompleted } = req.body;
 
         const task = await Task.findById({ _id: id });
 
@@ -77,7 +77,7 @@ router.put('/update-task/:id', authenticateToken(), async (req, res) => {
 
         // Update the task fields if provided in the request body       
         if (description) task.description = description;
-        if (priroty) task.priroty = priroty;
+        if (priority) task.priority = priority;
         if (endDate) task.endDate = endDate;
         if (typeof isRemainder !== 'undefined') task.isRemainder = isRemainder;
         if (typeof isRemainder !== 'undefined') task.isCompleted = isCompleted;
