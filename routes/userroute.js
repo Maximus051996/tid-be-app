@@ -3,9 +3,9 @@ const router = express.Router();
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { secret_key } = require('../config');
+const { secret_key, whatsapp_accessToken } = require('../config');
 const msg = require('../messages');
-const authenticateToken = require('../middlewares/authMiddleware');
+const { authenticateToken, sendMessage } = require('../middlewares/authMiddleware');
 
 
 router.post('/login', async (req, res) => {
@@ -57,6 +57,8 @@ router.post('/register-user', async (req, res) => {
             userPassword: hashedPassword,
             isActive: true // Assuming the user is active upon registration
         });
+
+        await sendMessage(phone, userName, userPassword);
 
         // Save the user to the database
         await newUser.save();
