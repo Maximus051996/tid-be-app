@@ -37,12 +37,14 @@ router.get('/task/:id', authenticateToken(), async (req, res) => {
 router.post('/add-task', authenticateToken(), async (req, res) => {
     // #swagger.tags = ['Task-Module']
     try {
-        const { subject, description, priority, startDate, endDate, isRemainder } = req.body;
+        const { subject, description, priority, startDate, endDate, isRemainder, subtasks, taskStatus } = req.body;
 
         // Validate required fields
-        if (!subject || !description || !priority || !startDate || !endDate) {
+        if (!subject || !description || !priority || !startDate || !endDate || !taskStatus) {
             return res.status(400).json({ error: msg.MANDATORY_FIELDS_ERROR });
         }
+
+
 
         const newTask = new Task({
             subject,
@@ -50,11 +52,13 @@ router.post('/add-task', authenticateToken(), async (req, res) => {
             priority,
             startDate,
             endDate,
+            subtasks,
             isRemainder,
             isDeleted: false,
-            isCompleted: false,
+            taskStatus,
             userId: req.user.userId
         });
+        console.log(newTask);
 
         await newTask.save();
 
@@ -69,7 +73,7 @@ router.put('/update-task/:id', authenticateToken(), async (req, res) => {
     // #swagger.tags = ['Task-Module']
     try {
         const { id } = req.params;
-        const { description, priority, endDate, isRemainder, isCompleted } = req.body;
+        const { description, priority, startDate, endDate, isRemainder, taskStatus, subtasks } = req.body;
 
         const task = await Task.findById({ _id: id });
 
@@ -77,13 +81,15 @@ router.put('/update-task/:id', authenticateToken(), async (req, res) => {
             return res.status(404).json({ error: msg.NOT_FOUND_ERROR });
         }
 
-        // Update the task fields if provided in the request body       
-        if (description) task.description = description;
-        if (priority) task.priority = priority;
-        if (endDate) task.endDate = endDate;
-        if (req.user.userId) task.userId = req.user.userId;
-        if (typeof isRemainder !== 'undefined') task.isRemainder = isRemainder;
-        if (typeof isRemainder !== 'undefined') task.isCompleted = isCompleted;
+        // Update the task's fields
+        task.startDate = startDate || task.startDate;
+        task.description = description || task.description;
+        task.priority = priority || task.priority;
+        task.endDate = endDate || task.endDate;
+        task.isRemainder = isRemainder !== undefined ? isRemainder : task.isRemainder;
+        task.taskStatus = taskStatus || task.taskStatus;
+        task.subtasks = subtasks || task.subtasks;
+
 
         await task.save();
 

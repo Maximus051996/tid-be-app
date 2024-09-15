@@ -28,15 +28,34 @@ const TaskSchema = new mongoose.Schema({
     isDeleted: {
         type: Boolean,
     },
-    isCompleted: {
-        type: Boolean,
+    taskStatus: {
+        type: String,
+        required: true
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId, // Reference to User model
         ref: 'User', // Reference the 'User' model
         required: true // Make it required to associate the task with a user
+    },
+    subtasks: {
+        type: [{ type: String }], // Array of strings
+        default: [] // Default to an empty array
     }
 }, { collection: 'tbl_taskInfo' });
+
+
+// Convert UTC to Local Time (e.g., IST) before saving the task
+TaskSchema.pre('save', function (next) {
+    // Get local time zone offset in minutes
+    const timezoneOffset = new Date().getTimezoneOffset(); // IST offset is -330 (UTC+5:30)
+
+    // Adjust startDate and endDate to local time
+    this.startDate = new Date(this.startDate.getTime() - timezoneOffset * 60000);
+    this.endDate = new Date(this.endDate.getTime() - timezoneOffset * 60000);
+
+    next();
+});
+
 
 // Export Task model
 module.exports = mongoose.model('Task', TaskSchema);

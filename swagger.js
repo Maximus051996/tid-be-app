@@ -129,6 +129,7 @@ const doc = {
                                     startDate: { type: 'string', format: 'date-time' },
                                     endDate: { type: 'string', format: 'date-time' },
                                     isRemainder: { type: 'boolean' },
+                                    subtasks: { type: "array", items: { type: "string" } } // Added subtasks here
                                 },
                                 example: {
                                     subject: 'New Task',
@@ -137,6 +138,7 @@ const doc = {
                                     startDate: '2024-08-24T14:00:00Z',
                                     endDate: '2024-08-25T14:00:00Z',
                                     isRemainder: true,
+                                    subtasks: ['Subtask 1', 'Subtask 2'],
                                 },
                             },
                         },
@@ -175,6 +177,7 @@ const doc = {
                                     endDate: { type: 'string', format: 'date-time' },
                                     isRemainder: { type: 'boolean' },
                                     isCompleted: { type: 'boolean' },
+                                    subtasks: { type: "array", items: { type: "string" } }
                                 },
                             },
                         },
