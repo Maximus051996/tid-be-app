@@ -9,9 +9,8 @@ const cron = require('node-cron');
 router.get('/tasks', authenticateToken(), async (req, res) => {
     // #swagger.tags = ['Task-Module']
     try {
-        const userId = req.user.userId;
-        // Fetch tasks for the user and sort them by startDate in ascending order
-        const tasks = await Task.find({ userId: userId }).sort({ startDate: 1 }); // 1 for ascending order
+        // Fetch tasks for the user and sort them by startDate in descending order
+        const tasks = await Task.find({ userId: userId }).sort({ startDate: -1 }); // -1 for descending order
 
         res.status(200).json(tasks);
     } catch (error) {
