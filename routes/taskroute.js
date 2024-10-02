@@ -3,13 +3,16 @@ const router = express.Router();
 const Task = require('../models/task');
 const { authenticateToken } = require('../middlewares/authMiddleware');
 const msg = require('../messages');
+const cron = require('node-cron');
 
 // Get all tasks
 router.get('/tasks', authenticateToken(), async (req, res) => {
     // #swagger.tags = ['Task-Module']
     try {
         const userId = req.user.userId;
-        const tasks = await Task.find({ userId: userId });
+        // Fetch tasks for the user and sort them by startDate in ascending order
+        const tasks = await Task.find({ userId: userId }).sort({ startDate: 1 }); // 1 for ascending order
+
         res.status(200).json(tasks);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -121,6 +124,26 @@ router.delete('/delete-task/:id', authenticateToken(), async (req, res) => {
         res.status(200).json({ message: msg.DELETE_RECORD_MESSAGE, tasks: allTasks });
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+});
+
+
+// Cron Job to delete tasks every Sunday at 9 PM
+cron.schedule('0 21 * * 0', async () => {
+    try {
+        console.log('Cron job running every Sunday at 9 PM to delete deleted or completed tasks.');
+
+        // Delete tasks that are either marked as deleted or completed
+        const result = await Task.deleteMany({
+            $or: [
+                { isDeleted: true },
+                { taskStatus: 'completed' }
+            ]
+        });
+
+        console.log(`Deleted ${result.deletedCount} tasks.`);
+    } catch (error) {
+        console.error('Error during cron job:', error.message);
     }
 });
 
