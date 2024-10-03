@@ -129,7 +129,7 @@ router.delete('/delete-task/:id', authenticateToken(), async (req, res) => {
 
 
 // Cron Job to delete tasks every Sunday at 9 PM
-cron.schedule('0 21 * * 0', async () => {
+cron.schedule('0 0 * * *', async () => {
     try {
         console.log('Cron job running every Sunday at 9 PM to delete deleted or completed tasks.');
 
