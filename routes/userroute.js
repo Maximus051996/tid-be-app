@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+const Task = require('../models/task');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { secret_key, whatsapp_accessToken } = require('../config');
@@ -27,6 +28,28 @@ router.post('/login', async (req, res) => {
 
         // Generate JWT token
         const token = jwt.sign({ userId: user._id, userName: user.userName }, secret_key, { expiresIn: '30m' });
+
+        await Task.deleteMany({
+            $and: [
+                { isDeleted: true },
+                { userId: user._id }
+            ]
+        });
+
+        // Check if today is the last day of the month
+        const today = new Date();
+        const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+        if (today.getDate() === lastDayOfMonth.getDate()) {
+            // Delete all tasks for the user
+            await Task.deleteMany({
+                $and: [
+                    { taskStatus: 'completed' },
+                    { userId: user._id }
+                ]
+            });
+        }
+
 
         // Return token 
         res.status(200).json({ token });
