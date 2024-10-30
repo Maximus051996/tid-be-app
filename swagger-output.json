@@ -15,6 +15,10 @@
     {
       "name": "Task-Module",
       "description": "Endpoints related to task modules information"
+    },
+    {
+      "name": "Investment-Module",
+      "description": "Endpoints related to investment module information"
     }
   ],
   "schemes": [
@@ -242,14 +246,20 @@
                 },
                 "isRemainder": {
                   "example": "any"
+                },
+                "subtasks": {
+                  "example": "any"
+                },
+                "taskStatus": {
+                  "example": "any"
                 }
               }
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
+          "200": {
+            "description": "OK"
           },
           "400": {
             "description": "Bad Request"
@@ -293,7 +303,10 @@
                 "description": {
                   "example": "any"
                 },
-                "priroty": {
+                "priority": {
+                  "example": "any"
+                },
+                "startDate": {
                   "example": "any"
                 },
                 "endDate": {
@@ -302,7 +315,10 @@
                 "isRemainder": {
                   "example": "any"
                 },
-                "isCompleted": {
+                "taskStatus": {
+                  "example": "any"
+                },
+                "subtasks": {
                   "example": "any"
                 }
               }
@@ -332,6 +348,217 @@
       "delete": {
         "tags": [
           "Task-Module"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/investments": {
+      "get": {
+        "tags": [
+          "Investment-Module"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/investment/{id}": {
+      "get": {
+        "tags": [
+          "Investment-Module"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/add-investment": {
+      "post": {
+        "tags": [
+          "Investment-Module"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "categoryName": {
+                  "example": "any"
+                },
+                "componentName": {
+                  "example": "any"
+                },
+                "amount": {
+                  "example": "any"
+                },
+                "fyYear": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/update-investment/{id}": {
+      "put": {
+        "tags": [
+          "Investment-Module"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "example": "any"
+                },
+                "fyYear": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/delete-investment/{id}": {
+      "delete": {
+        "tags": [
+          "Investment-Module"
         ],
         "description": "",
         "parameters": [

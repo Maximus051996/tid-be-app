@@ -7,6 +7,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
 const userRoute = require('./routes/userroute');
 const taskRoute = require('./routes/taskroute');
+const investmentRoute = require('./routes/investmentroute');
 const msg = require('./messages');
 const app = express();
 
@@ -17,7 +18,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(userRoute);
 app.use(taskRoute);
-
+app.use(investmentRoute);
 // Swagger Documentation
 
 // Serve Swagger UI documentation
