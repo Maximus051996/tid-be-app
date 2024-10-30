@@ -16,6 +16,10 @@ const doc = {
             name: 'Task-Module',
             description: 'Endpoints related to task modules information',
         },
+        {
+            name: 'Investment-Module',
+            description: 'Endpoints related to investment module information',
+        }
     ],
     paths: {
         '/login': {
@@ -234,12 +238,136 @@ const doc = {
                 },
             },
         },
+        '/investments': {
+            get: {
+                summary: 'Get all investments for a user',
+                tags: ['Investment-Module'],
+                security: [{ Bearer: [] }],
+                responses: {
+                    200: { description: 'Fetched investments successfully' },
+                    500: { description: 'Internal server error' },
+                },
+            },
+        },
+        '/investment/{id}': {
+            get: {
+                summary: 'Get investment details by ID',
+                tags: ['Investment-Module'],
+                security: [{ Bearer: [] }],
+                parameters: [
+                    {
+                        name: 'id',
+                        in: 'path',
+                        required: true,
+                        schema: { type: 'string' },
+                    },
+                ],
+                responses: {
+                    200: { description: 'Fetched investment successfully' },
+                    404: { description: 'Investment not found' },
+                    500: { description: 'Internal server error' },
+                },
+            },
+        },
+        '/add-investment': {
+            post: {
+                summary: 'Add a new investment',
+                tags: ['Investment-Module'],
+                security: [{ Bearer: [] }],
+                requestBody: {
+                    required: true,
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    categoryName: { type: 'string' },
+                                    componentName: { type: 'string' },
+                                    amount: { type: 'number' },
+                                    fyYear: { type: 'number', },
+                                },
+                                example: {
+                                    categoryName: '80C',
+                                    componentName: 'LIC',
+                                    amount: 490000,
+                                    fyYear: 2024,
+                                    isActive: true,
+                                },
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    200: { description: 'Investment added successfully' },
+                    400: { description: 'Missing required fields' },
+                    500: { description: 'Internal server error' },
+                },
+            },
+        },
+        '/update-investment/{id}': {
+            put: {
+                summary: 'Update an existing investment',
+                tags: ['Investment-Module'],
+                security: [{ Bearer: [] }],
+                parameters: [
+                    {
+                        in: 'path',
+                        name: 'id',
+                        required: true,
+                        schema: { type: 'string' },
+                    },
+                ],
+                requestBody: {
+                    required: true,
+                    content: {
+                        'application/json': {
+                            schema: {
+                                type: 'object',
+                                properties: {
+                                    amount: { type: 'number' },
+                                    fyYear: { type: 'number' },
+                                },
+                                example: {
+                                    amount: 600000,
+                                    fyYear: 2025,
+                                },
+                            },
+                        },
+                    },
+                },
+                responses: {
+                    200: { description: 'Investment updated successfully' },
+                    404: { description: 'Investment not found' },
+                    500: { description: 'Internal server error' },
+                },
+            },
+        },
+        '/delete-investment/{id}': {
+            delete: {
+                summary: 'Delete an investment by ID',
+                tags: ['Investment-Module'],
+                security: [{ Bearer: [] }],
+                parameters: [
+                    {
+                        in: 'path',
+                        name: 'id',
+                        required: true,
+                        schema: { type: 'string' },
+                    },
+                ],
+                responses: {
+                    200: { description: 'Investment deleted successfully' },
+                    404: { description: 'Investment not found' },
+                    500: { description: 'Internal server error' },
+                },
+            },
+        },
     },
 };
 
 
 const outputFile = './swagger-output.json';
-const routes = ['./routes/userroute.js', './routes/taskroute.js'];
+const routes = ['./routes/userroute.js', './routes/taskroute.js', './routes/investmentroute.js'];
 
 const options = {
     customCss: '.swagger-ui .topbar { display: none }'
